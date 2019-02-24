@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Pogoda</title>
+</head>
+<body>
+    <div style="text-align: center">
+        <th:block th:if="${apiError != null}" th:switch="${apiError.value()}">
+            <h3 style="color: red" th:case="404">Nie znaleziono miasta</h3>
+        </th:block>
+
+        <h3 th:if="${weather != null}" th:text="'Temperatura: ' + ${weather.getWeatherParameters().getTemp() + ' st.C'}"></h3>
+        <h3 th:if="${weather != null}" th:text="'Wilgotność: ' + ${weather.getWeatherParameters().getHumidity() + '%'}"></h3>
+        <h3 th:if="${weather != null}" th:text="'Zachmurzenie: ' + ${weather.getClouds().getAll() + '%'}"></h3>
+        <!--<h3 style="color: red" th:if="${message != null}" th:text="${message}"></h3>-->
+
+        <hr/>
+
+        <ul th:if="${forecast != null}">
+            <li th:each="weather : ${forecast.getDailyForecastList()}"
+                th:text="${weather.getDate().getDayOfWeek()} + ' : Temperatura: ' + ${weather.getWeatherParameters().getTemp()}">
+            </li>
+        </ul>
+
+        <form method="post" action="/">
+            Nazwa miasta:<br/>
+            <input type="text" name="cityName" placeholder="Miasto"><br/><br/>
+            <input type="submit" value="Sprawdź">
+        </form>
+    </div>
+
+</body>
+</html>
